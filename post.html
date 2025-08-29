@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Open in SocialShop</title>
+    <script>
+        // Get post ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        
+        if (postId) {
+            // Try to open app
+            window.location.href = 'socialshop://post/' + postId;
+            
+            // If app not installed, show instructions
+            setTimeout(function() {
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px; font-family: Arial;">
+                        <h1>SocialShop App</h1>
+                        <p>To view this post, please install the SocialShop app</p>
+                        <p>Post ID: ${postId}</p>
+                        <p>Save this ID and open it in the app later</p>
+                    </div>
+                `;
+            }, 1000);
+        }
+    </script>
+</head>
+<body>
+    <p>Opening SocialShop app...</p>
+</body>
+</html>
