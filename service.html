@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUClean Service</title>
+    <script>
+        // Get the service ID from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const serviceId = urlParams.get('id');
+        
+        if (serviceId) {
+            // Redirect to the app with a deep link
+            window.location.href = `juclean://service/${serviceId}`;
+            
+            // Fallback: Redirect to app store if the app isn't installed
+            setTimeout(function() {
+                window.location.href = "https://play.google.com/store/apps/details?id=com.itec.juclean";
+            }, 1000);
+        } else {
+            document.body.innerHTML = "<h1>Service not found</h1><p>Redirecting to home page...</p>";
+            setTimeout(function() {
+                window.location.href = "https://khaledtecno.github.io/juclean";
+            }, 2000);
+        }
+    </script>
+</head>
+<body>
+    <noscript>
+        <h1>JUClean Service</h1>
+        <p>Please enable JavaScript to view this service.</p>
+    </noscript>
+</body>
+</html>
