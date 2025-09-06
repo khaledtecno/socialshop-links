@@ -4,31 +4,114 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUClean Service</title>
+    <meta name="description" content="Professional cleaning services by JUClean">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2196F3;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2196F3;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <script>
         // Get the service ID from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const serviceId = urlParams.get('id');
         
-        if (serviceId) {
-            // Redirect to the app with a deep link
-            window.location.href = `juclean://service/${serviceId}`;
-            
-            // Fallback: Redirect to app store if the app isn't installed
-            setTimeout(function() {
-                window.location.href = "https://play.google.com/store/apps/details?id=com.itec.juclean";
-            }, 1000);
-        } else {
-            document.body.innerHTML = "<h1>Service not found</h1><p>Redirecting to home page...</p>";
-            setTimeout(function() {
-                window.location.href = "https://khaledtecno.github.io/juclean";
-            }, 2000);
+        // Try to open the app with a deep link
+        function openApp() {
+            if (serviceId) {
+                // Try to open the app
+                window.location.href = `juclean://service/${serviceId}`;
+                
+                // If the app isn't installed, redirect after a delay
+                setTimeout(function() {
+                    redirectToStore();
+                }, 1000);
+            } else {
+                document.getElementById('message').innerHTML = 
+                    '<h2>Service Not Found</h2><p>No service ID provided in the URL.</p>';
+                document.getElementById('spinner').style.display = 'none';
+            }
         }
+        
+        function redirectToStore() {
+            // Redirect to appropriate app store based on device
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            if (/android/i.test(userAgent)) {
+                window.location.href = "https://play.google.com/store/apps/details?id=com.itec.juclean";
+            } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                window.location.href = "https://apps.apple.com/app/idyour-app-id";
+            } else {
+                // Generic fallback
+                document.getElementById('message').innerHTML = 
+                    '<h2>App Not Installed</h2><p>Please install the JUClean app to view this service.</p>';
+                document.getElementById('spinner').style.display = 'none';
+                document.getElementById('fallback').style.display = 'block';
+            }
+        }
+        
+        // Initialize when page loads
+        window.onload = function() {
+            openApp();
+        };
     </script>
 </head>
 <body>
-    <noscript>
-        <h1>JUClean Service</h1>
-        <p>Please enable JavaScript to view this service.</p>
-    </noscript>
+    <div class="container">
+        <img src="https://khaledtecno.github.io/juclean/logo.png" alt="JUClean Logo" class="logo">
+        <div id="spinner" class="spinner"></div>
+        <div id="message">
+            <h2>Redirecting to JUClean App...</h2>
+            <p>Please wait while we open this service in the JUClean app.</p>
+        </div>
+        <div id="fallback" style="display: none;">
+            <p>Don't have the app?</p>
+            <a href="https://play.google.com/store/apps/details?id=com.itec.juclean" class="button">Get Android App</a>
+            <a href="https://apps.apple.com/app/idyour-app-id" class="button">Get iOS App</a>
+            <p>Or visit our website: <a href="https://yourusername.github.io/juclean">JUClean Home</a></p>
+        </div>
+    </div>
 </body>
 </html>
